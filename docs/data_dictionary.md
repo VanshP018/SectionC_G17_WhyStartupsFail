@@ -4,9 +4,10 @@
 **Team:** Section C, Group 17 | Newton School of Technology | DVA Capstone 2  
 **Dataset:** Crunchbase VC Investments (raw)  
 **Source:** Kaggle — [investments_VC.csv](https://www.kaggle.com/datasets/arindam235/startup-investments-crunchbase)  
+**Unit of Analysis (Grain):** One row represents one startup entity (not individual funding rounds).  
 **Row Count (raw):** 54,294  
-**Row Count (cleaned):** ~40,000–45,000 (after ETL)  
-**Time Period:** ~1990 – 2023 (founded year)  
+**Row Count (cleaned):** 28,534 (after ETL)  
+**Time Period:** 1990 – 2014 (founded year)  
 
 ---
 
@@ -29,7 +30,7 @@
 | `founded_at` | string | Company founding date (YYYY-MM-DD) | ~30% missing; parsed to datetime |
 | `founded_month` | string | Founding month (YYYY-MM format) | Redundant with `founded_at` |
 | `founded_quarter` | string | Founding quarter (YYYY-QN format) | Redundant with `founded_at` |
-| `founded_year` | float | Founding year | Some implausible values (pre-1980); filtered |
+| `founded_year` | float | Founding year | Older/sparse records outside the final 1990–2014 window were filtered |
 | `first_funding_at` | string | Date of first funding event | Parsed to datetime |
 | `last_funding_at` | string | Date of most recent funding event | Parsed to datetime |
 | `seed` | float | Amount raised via seed funding (USD) | 0 if no seed round |
@@ -64,10 +65,68 @@
 | `funding_duration_days` | integer | `(last_funding_at - first_funding_at).dt.days` | Measures investor engagement duration (runway proxy) |
 | `avg_funding_per_round` | float | `funding_total_usd / funding_rounds` | Capital efficiency metric |
 | `is_usa` | binary (0/1) | `1 if country_code == 'USA'` | Controls for ecosystem effect |
-| `primary_category` | string | First pipe-separated value from `category_list` (index 1) | Simplified sector filter for Tableau |
+| `primary_category` | string | Extracted as the first non-empty value from the pipe-separated `category_list` (typically index 1 due to the leading pipe delimiter) | Simplified sector filter for Tableau |
 | `is_closed` | binary (0/1) | `1 if status == 'closed'` | **Target variable** — binary failure indicator |
 | `reached_series_a` | binary (0/1) | `1 if round_A > 0 OR round_B > 0 OR round_C > 0` | Survival inflection-point indicator |
 | `founding_decade` | integer | `(founded_year // 10) * 10` | Decade-level cohort grouping for time analysis |
+| `funding_tier` | string | Bucket `funding_total_usd` into tiers (e.g., Low / Medium / High) | Simplifies segmentation analysis |
+| `has_seed` | binary (0/1) | `1 if seed > 0` | Early-stage funding indicator |
+
+---
+
+## Final Dataset (Post-ETL)
+
+**Final cleaned dataset:** `data/processed/cleaned.csv`  
+**Total Columns:** 47  
+**Total Rows:** 28,534  
+
+### Column Categories
+
+- **Identifiers:** `name` (`permalink` exists in the raw source but was dropped from the final cleaned export because it is a non-analytical identifier)
+- **Target:** `is_closed`
+- **Numerical:** `funding_total_usd`, `funding_rounds`, `avg_funding_per_round`, `days_to_first_funding`, `funding_duration_days`, funding-stage amount columns (`seed` to `round_H`)
+- **Categorical:** `status`, `market`, `country_code`, `state_code`, `region`, `city`, `primary_category`, `funding_tier`
+- **Time:** `founded_at`, `founded_month`, `founded_quarter`, `founded_year`, `first_funding_at`, `last_funding_at`, `founding_decade`
+- **Binary:** `is_usa`, `reached_series_a`, `has_seed`
+
+This dataset serves as the single source of truth for all downstream EDA, statistical analysis, and modeling.
+
+---
+
+## Target Variable
+
+`is_closed`:
+- `1` -> Startup failed (`status = closed`)
+- `0` -> Startup survived or achieved a positive exit (`status = operating`, `acquired`, or `ipo`)
+
+**Note:** Acquired and IPO outcomes are treated as successful outcomes, not failures.
+
+---
+
+## Cleaning Summary
+
+| Step | Action |
+|---|---|
+| Column trimming | Removed leading/trailing whitespace from text fields such as `market` and status labels |
+| Funding column | Converted `funding_total_usd` from string to numeric float after removing commas and placeholder symbols |
+| Dates | Parsed `founded_at`, `first_funding_at`, and `last_funding_at` to datetime |
+| Missing status | Dropped records with missing startup status because the target variable could not be derived |
+| Duplicates | Removed duplicate startup records during ETL |
+| Outliers | Filtered `founded_year` to the final valid range of `1990-2014` |
+
+---
+
+## Units & Scale Clarification
+
+- All funding values are recorded in **USD**
+- Log scale is used in visualisations where specified for heavily skewed funding distributions
+- Duration-based variables such as `days_to_first_funding` and `funding_duration_days` are measured in **days**
+
+---
+
+## Missing Data Handling Strategy
+
+Missing values in non-critical fields such as `region` and `city` were retained to preserve row coverage. Missing values in critical analytical fields such as `status` resulted in row removal because the target variable could not be derived reliably.
 
 ---
 
@@ -100,7 +159,7 @@
 ## Data Limitations
 
 1. **Survivorship bias:** Startups with no digital presence may not appear in Crunchbase, understating the true failure rate.
-2. **Status lag:** Recent startups (2018–2023) may still be classified as "operating" even if they have since closed — outcomes require time to materialise.
+2. **Status lag:** More recent startups in the final dataset (especially 2010–2014 cohorts) may still be classified as "operating" even if they later closed — outcomes require time to materialise.
 3. **Geographic skew:** The USA is heavily over-represented (~60% of records). Conclusions for other ecosystems have wider uncertainty bands.
 4. **Funding amounts:** Some funding values are 0 or very small, which may reflect incomplete Crunchbase reporting rather than actual absence of investment.
 5. **Market labels:** Market/sector classification is self-reported by startups and may be inconsistent across similar companies.
@@ -108,3 +167,5 @@
 ---
 
 *Last updated: April 2026 | Section C, Group 17*
+
+All transformations are reproducible via the ETL pipeline defined in Notebook 02 — Data Cleaning & ETL.
