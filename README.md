@@ -14,6 +14,8 @@
 5. Connect the processed CSVs in `data/processed/` to Tableau Public
 6. Publish the dashboard and update the URL in `tableau/dashboard_links.md`
 
+If you run the notebooks in Google Colab after mounting Drive, set `PROJECT_ROOT` to your repository root so the path helpers resolve the dataset and output folders correctly.
+
 ### Quick Start
 
 ```bash
@@ -26,7 +28,12 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
-If working in Google Colab: upload notebooks from `notebooks/` and keep final `.ipynb` files committed to GitHub.
+### Quick Start (Google Colab)
+
+1. Open the notebooks from `notebooks/` in Colab.
+2. Upload `data/raw/investments_VC.csv`, or mount Drive and set `PROJECT_ROOT` to the repo root.
+3. Run the notebooks in order from `01` to `05`.
+4. If you only upload the raw CSV directly to Colab storage, the notebooks also fall back to `/content/investments_VC.csv`.
 
 ---
 
@@ -38,21 +45,17 @@ If working in Google Colab: upload notebooks from `notebooks/` and keep final `.
 | **Sector** | Finance / Venture Capital / Startup Ecosystem |
 | **Team ID** | Section C, Group 17 |
 | **Section** | Section C |
-| **Faculty Mentor** | *(To be filled)* |
+| **Faculty Mentor** | Pending team confirmation |
 | **Institute** | Newton School of Technology |
-| **Submission Date** | *(To be filled)* |
+| **Submission Date** | 22 April 2026 |
 
 ### Team Members
 
 | Role | Name | GitHub Username |
 |---|---|---|
-| Project Lead | *(Name)* | `@riyaseema80` |
-| Data Lead | *(Name)* | `github-handle` |
-| ETL Lead | *(Name)* | `github-handle` |
-| Analysis Lead | *(Name)* | `github-handle` |
-| Visualization Lead | *(Name)* | `github-handle` |
-| Strategy Lead | *(Name)* | `github-handle` |
-| PPT & Quality Lead | *(Name)* | `github-handle` |
+| Project Lead | Riya Garg | `@riyaseema80` |
+| Data & ETL Lead | Rashmi | `@rashmianand` |
+| Analysis & Visualization Lead | Vachan Gupta | `@VachanGupta` |
 
 ---
 
@@ -78,7 +81,7 @@ The global startup ecosystem is characterised by a well-known but poorly underst
 | **Direct Access Link** | [Kaggle — Startup Investments Crunchbase](https://www.kaggle.com/datasets/arindam235/startup-investments-crunchbase) |
 | **Row Count (raw)** | 54,294 |
 | **Row Count (cleaned)** | 33,613 |
-| **Column Count** | 39 retained raw columns + 9 engineered columns = 48 total |
+| **Column Count** | 37 retained raw columns + 10 engineered columns = 47 total |
 | **Time Period Covered** | 1990 – 2014 (founding year) |
 | **Format** | CSV |
 
@@ -98,7 +101,7 @@ The final processed dataset reflects the current ETL rules in `scripts/etl_pipel
 | `is_closed` *(engineered)* | Binary target: 1 = closed, 0 = other | Logistic regression target |
 | `funding_tier` *(engineered)* | Funding band derived from total capital raised | Segmentation and cohort analysis |
 
-For full column definitions, see [`docs/data_dictionary.md`](docs/data_dictionary.md).
+For full column definitions, see [docs/data_dictionary.md](/Users/rashmianand/Desktop/SectionC_G17_WhyStartupsFail/docs/data_dictionary.md).
 
 ---
 
@@ -121,13 +124,13 @@ All KPIs computed in `notebooks/04_statistical_analysis.ipynb` and exported via 
 
 | Item | Details |
 |---|---|
-| **Dashboard URL** | *(Paste Tableau Public link here after publishing)* |
+| **Dashboard URL** | Pending Tableau Public publication |
 | **Executive View** | KPI summary tiles, failure rate by status, funding gap summary |
 | **Operational View** | Sector failure rate bar chart, geographic heatmap, funding scatter plot |
 | **Trend View** | Year-over-year startup volume and failure rate dual-axis chart |
 | **Main Filters** | Country, Market/Sector, Founding Decade, Status, Funding Round Count |
 
-Dashboard screenshots are stored in [`tableau/screenshots/`](tableau/screenshots/). Links are documented in [`tableau/dashboard_links.md`](tableau/dashboard_links.md).
+Dashboard screenshots are stored in [tableau/screenshots](/Users/rashmianand/Desktop/SectionC_G17_WhyStartupsFail/tableau/screenshots). Links are documented in [tableau/dashboard_links.md](/Users/rashmianand/Desktop/SectionC_G17_WhyStartupsFail/tableau/dashboard_links.md).
 
 ---
 
@@ -135,16 +138,13 @@ Dashboard screenshots are stored in [`tableau/screenshots/`](tableau/screenshots
 
 *Written in decision language — what a stakeholder should think or act on:*
 
-1. **~20–35% of all VC-backed startups permanently close** — failure is not a tail event; it is a mainstream outcome that demands systematic risk frameworks.
-2. **Startups with only one funding round fail at the highest rate** — single-round companies represent the riskiest investment profile, requiring higher return hurdles to justify the risk.
-3. **Reaching Series A is the single strongest survival signal in this dataset** — failure rates drop dramatically after Series A, confirming that institutional validation at this stage is a quality filter, not just capital.
-4. **Closed startups receive a median of several multiples less funding than operating ones** — underfunding is a measurable, statistically significant predictor of failure (Mann-Whitney U, p < 0.001).
-5. **Media, gaming, and consumer retail sectors consistently show above-average failure rates** — sector selection accounts for a statistically significant portion of outcome variance.
-6. **The dot-com era (1999–2001) produced the highest concentrated failure cluster** — macro conditions amplify underlying business risk; temporal context matters in failure analysis.
-7. **USA-based startups benefit from a mature ecosystem** — despite accounting for ~60% of records, the US failure rate is moderate relative to smaller, less-developed ecosystems.
-8. **Longer funding duration (first to last round) correlates with survival** — startups that maintain investor engagement over time are significantly more likely to avoid closure.
-9. **Funding rounds count is a stronger survival predictor than total funding amount** — sustained multi-round investment signals investor confidence more than a single large cheque.
-10. **Logistic regression confirms that funding rounds, total capital, Series A attainment, and US location are all statistically significant independent predictors of survival.**
+1. **Closed startups represent about 5.1% of the cleaned sample** — the target is imbalanced, so analysis must focus on signal quality rather than raw accuracy alone.
+2. **Startups with only one funding round fail at the highest rate** — single-round firms are the clearest high-risk cohort in the EDA.
+3. **Closed startups receive materially less funding than operating startups** — median funding is about **$850K** for closed firms versus **$1.75M** for operating firms.
+4. **Sector risk is uneven** — markets such as `Curated Web` and `Games` sit near the high-risk end of the largest-sector rankings.
+5. **Founding cohort matters** — the 2005–2009 cohorts show the sharpest failure-rate concentrations in the current cleaned sample.
+6. **Funding rounds are a stronger protective signal than any single capital amount** — repeat investor participation consistently aligns with better outcomes.
+7. **Logistic regression confirms that more rounds and more capital reduce closure odds independently** — startup failure is multi-causal, but the funding path remains central.
 
 ---
 
@@ -197,8 +197,8 @@ SectionC_G17_WhyStartupsFail/
 │   └── dashboard_links.md
 │
 ├── reports/
-│   ├── project_report.pdf           ← Final report (to be added)
-│   └── presentation.pdf            ← Slide deck (to be added)
+│   ├── project_report.pdf           ← Final report PDF
+│   └── presentation.pdf             ← Slide deck PDF
 │
 ├── docs/
 │   └── data_dictionary.md

@@ -93,41 +93,52 @@ VALID_STATUS_VALUES: set[str] = {"operating", "closed", "acquired", "ipo"}
 # Columns kept in the final cleaned export (order matters for readability).
 FINAL_COLUMNS: list[str] = [
     "name",
+    "category_list",
+    "market",
+    "funding_total_usd",
     "status",
-    "is_closed",
     "country_code",
     "state_code",
     "region",
     "city",
-    "is_usa",
-    "market",
-    "primary_category",
+    "funding_rounds",
     "founded_at",
     "founded_month",
     "founded_quarter",
     "founded_year",
-    "founding_decade",
     "first_funding_at",
     "last_funding_at",
-    "funding_rounds",
-    "funding_total_usd",
-    "avg_funding_per_round",
-    "funding_tier",
-    "has_seed",
-    "reached_series_a",
-    "days_to_first_funding",
-    "funding_duration_days",
     "seed",
     "venture",
+    "equity_crowdfunding",
+    "undisclosed",
+    "convertible_note",
+    "debt_financing",
     "angel",
-    "round_A",
-    "round_B",
-    "round_C",
-    "round_D",
-    "round_E",
-    "round_F",
-    "round_G",
-    "round_H",
+    "grant",
+    "private_equity",
+    "post_ipo_equity",
+    "post_ipo_debt",
+    "secondary_market",
+    "product_crowdfunding",
+    "round_a",
+    "round_b",
+    "round_c",
+    "round_d",
+    "round_e",
+    "round_f",
+    "round_g",
+    "round_h",
+    "days_to_first_funding",
+    "funding_duration_days",
+    "avg_funding_per_round",
+    "is_usa",
+    "primary_category",
+    "is_closed",
+    "reached_series_a",
+    "founding_decade",
+    "funding_tier",
+    "has_seed",
 ]
 
 ETL_VERSION: str = "v1.0"
@@ -478,7 +489,7 @@ def build_clean_dataset(input_path: Path) -> pd.DataFrame:
         df["primary_category"] = _extract_primary_category(df["category_list"])
 
     # Series A attainment — treat any positive value in A/B/C columns as reached
-    series_a_cols = [c for c in ["round_A", "round_B", "round_C"] if c in df.columns]
+    series_a_cols = [c for c in ["round_a", "round_b", "round_c"] if c in df.columns]
     if series_a_cols:
         df["reached_series_a"] = (
             df[series_a_cols].fillna(0).gt(0).any(axis=1)
@@ -543,15 +554,14 @@ def build_clean_dataset(input_path: Path) -> pd.DataFrame:
     # ── Step 11: Final column selection and type normalisation ───────────────
     before = len(df)
     present_final_cols = [c for c in FINAL_COLUMNS if c in df.columns]
-    extra_cols = [c for c in df.columns if c not in FINAL_COLUMNS]
-    df = df[present_final_cols + extra_cols]
+    df = df[present_final_cols]
 
     # Ensure text fields use the efficient pandas StringDtype
     for col in df.select_dtypes(include="object").columns:
         df[col] = df[col].astype("string")
 
     _log_step(11, "Select and reorder final columns", before, len(df),
-              f"{len(present_final_cols)} ordered columns + {len(extra_cols)} extras")
+              f"{len(present_final_cols)} ordered columns selected for the final export")
 
     df.attrs["etl_version"] = ETL_VERSION
     df.attrs["processed_on"] = datetime.datetime.now().isoformat(timespec="seconds")

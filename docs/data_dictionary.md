@@ -11,6 +11,18 @@
 
 ---
 
+## Quick Stats
+
+| Stat | Value |
+|---|---|
+| Final row count | 33,613 |
+| Final column count | 47 |
+| Target variable | `is_closed` |
+| Positive class rate | ~5.07% |
+| Date range | 1990–2014 |
+
+---
+
 ## Original Columns (Raw Dataset)
 
 | Column Name | Data Type (Raw) | Description | Quality Issues |
@@ -67,16 +79,18 @@
 | `is_usa` | binary (0/1) | `1 if country_code == 'USA'` | Controls for ecosystem effect |
 | `primary_category` | string | Extracted as the first non-empty value from the pipe-separated `category_list` (typically index 1 due to the leading pipe delimiter) | Simplified sector filter for Tableau |
 | `is_closed` | binary (0/1) | `1 if status == 'closed'` | **Target variable** — binary failure indicator |
-| `founding_decade` | integer | `(founded_year // 10) * 10` | Decade-level cohort grouping for time analysis |
-| `funding_tier` | string | Bucket `funding_total_usd` into tiers (e.g., Low / Medium / High) | Simplifies segmentation analysis |
+| `founding_decade` | Int64 (nullable) | `(founded_year // 10) * 10` | Decade-level cohort grouping for time analysis |
+| `funding_tier` | string | `pd.cut(funding_total_usd, [0, 100K, 1M, 10M, ∞])` -> Micro / Seed / Growth / Late Stage | Simplifies segmentation analysis |
 | `has_seed` | binary (0/1) | `1 if seed > 0` | Early-stage funding indicator |
+
+**Note:** `founding_decade` uses pandas nullable `Int64` so decade values can remain missing where the source year is unavailable before filtering.
 
 ---
 
 ## Final Dataset (Post-ETL)
 
 **Final cleaned dataset:** `data/processed/startups_cleaned.csv`  
-**Total Columns:** 48  
+**Total Columns:** 47  
 **Total Rows:** 33,613  
 
 ### Column Categories
