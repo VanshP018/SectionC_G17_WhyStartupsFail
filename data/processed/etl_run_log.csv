@@ -1,0 +1,8 @@
+timestamp,step,why,rows_before,rows_after,cols_before,cols_after,records_affected,notes
+2026-04-28T15:44:08,load_raw_data,Load immutable raw dataset with compatible encoding.,54294,54294,39,39,,
+2026-04-28T15:44:08,standardize_column_names,Normalize naming conventions and remove hidden whitespace/symbol variance.,54294,54294,39,39,10.0,records_affected = number of columns renamed
+2026-04-28T15:44:08,clean_text_and_missing_tokens,Trim text noise and convert placeholder-like values into true missing markers.,54294,54294,39,39,94909.0,
+2026-04-28T15:44:09,remove_duplicates,Prevent duplicate-company overcounting in downstream analyses.,54294,49437,39,39,4857.0,exact_duplicates=4855; permalink_duplicates=2
+2026-04-28T15:44:09,parse_validate_dates,Ensure temporal fields are analytically valid and typed for time-series work.,49437,49437,39,39,16.0,
+2026-04-28T15:44:09,standardize_numeric_funding,Convert messy currency/number strings to numeric and enforce valid funding domain constraints.,49437,49437,39,39,40905.0,
+2026-04-28T15:44:09,derive_analysis_features,Create stable analytical features for status-based and timeline-based comparisons.,49437,49437,39,42,49437.0,
