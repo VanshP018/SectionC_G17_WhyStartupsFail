@@ -1,9 +1,0 @@
-{
-  "etl_version": "v1.0",
-  "processed_on": "2026-04-22T12:17:44",
-  "rows": 33613,
-  "columns": 47,
-  "unit_of_analysis": "One row represents one startup entity",
-  "csv_output": "data/processed/startups_cleaned.csv",
-  "parquet_output": "data/processed/startups_cleaned.parquet"
-}
