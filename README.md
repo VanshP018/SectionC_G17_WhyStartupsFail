@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📉 Why Startups Fail
+# Why Startups Fail
 ### VC Investment Pattern Analysis
 
 **Newton School of Technology · Data Visualization & Analytics · Capstone 2**
@@ -17,7 +17,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Project Overview](#-project-overview)
 - [Team](#-team)
@@ -38,7 +38,7 @@
 
 ---
 
-## 🎯 Project Overview
+##  Project Overview
 
 | Field | Details |
 |---|---|
@@ -46,9 +46,9 @@
 | **Sector** | Finance / Venture Capital / Startup Ecosystem |
 | **Team ID** | Section C, Group 17 |
 | **Section** | Section C |
-| **Faculty Mentor** | Pending team confirmation |
+| **Faculty Mentor** | Archit Sir |
 | **Institute** | Newton School of Technology |
-| **Submission Date** | 22 April 2026 |
+| **Submission Date** | 29 April 2026 |
 
 ---
 
@@ -57,11 +57,11 @@
 | Role | Name | GitHub |
 |---|---|---|
 |  Project Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
-|  Data Lead | Rashmi | [@rashmianand](https://github.com/rashmianand) |
+|  Data Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
 |  ETL Lead | Vachan Gupta | [@VachanGupta](https://github.com/VachanGupta) |
-|  Analysis Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
-|  Visualization Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
-|  PPT and Quality Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
+|  Analysis Lead | Rashmi Anand | [@rashmi06an](https://github.com/rashmi06an) |
+|  Visualization Lead | Rashmi Anand | [@rashmi06an](https://github.com/rashmi06an) |
+|  PPT and Quality Lead | Rashmi Anand | [@rashmi06an](https://github.com/rashmi06an) |
 |  Strategy Lead | Riya Garg | [@riyaseema80](https://github.com/riyaseema80) |
 
 
@@ -91,8 +91,8 @@ This project analyses over **54,000 records** of Crunchbase startup investment d
 | **Source Name** | Crunchbase Startup Investments (via Kaggle) |
 | **Direct Access Link** | [Kaggle — Startup Investments Crunchbase](https://www.kaggle.com/datasets/arindam235/startup-investments-crunchbase) |
 | **Row Count (raw)** | 54,294 |
-| **Row Count (cleaned)** | 33,613 |
-| **Column Count** | 37 raw + 10 engineered = **47 total** |
+| **Row Count (cleaned)** | 49,437 |
+| **Column Count** | 39 raw + engineered features = **42 total** |
 | **Time Period Covered** | 1990 – 2014 (founding year) |
 | **Format** | CSV |
 
@@ -123,16 +123,16 @@ For full column definitions and quality notes, see [`docs/data_dictionary.md`](d
 
 | KPI | Definition | Formula / Computation |
 |---|---|---|
-| **Overall Failure Rate (%)** | Percentage of all startups that permanently closed | `closed_count / total_count × 100` → **5.07%** |
-| **Funding Gap ($)** | Median funding difference between operating and closed startups | `median(operating) − median(closed)` → **$899,998** |
-| **Median Funding — Closed** | Median total capital raised by failed startups | **$850,002** |
-| **Median Funding — Operating** | Median total capital raised by surviving startups | **$1,750,000** |
+| **Overall Failure Rate (%)** | Percentage of all startups that permanently closed | `closed_count / total_count × 100` → **5.41%** |
+| **Funding Gap ($)** | Median funding difference between operating and closed startups | `median(operating) − median(closed)` → **$757,977.50** |
+| **Median Funding — Closed** | Median total capital raised by failed startups | **$1,000,000** |
+| **Median Funding — Operating** | Median total capital raised by surviving startups | **$1,757,977.50** |
 | **Avg Funding Rounds by Outcome** | Mean rounds per status group | Closed: **1.45** · Operating: **1.76** · Acquired: **2.10** |
 | **Sector Failure Index** | Ranked failure rate per market sector (min. 50 startups) | `closed_in_sector / total_in_sector × 100` |
-| **Series A Failure Rate** | Failure rate among startups that reached Series A | **4.71%** |
-| **Pre-Series A Failure Rate** | Failure rate among startups that never reached Series A | **5.21%** |
-| **USA Failure Rate** | Failure rate for US-based startups | **4.93%** |
-| **Non-USA Failure Rate** | Failure rate for non-US startups | **5.31%** |
+| **Series A Failure Rate** | Failure rate among startups that reached Series A | **5.21%** |
+| **Pre-Series A Failure Rate** | Failure rate among startups that never reached Series A | **5.45%** |
+| **USA Failure Rate** | Failure rate for US-based startups | **5.18%** |
+| **Non-USA Failure Rate** | Failure rate for non-US startups | **5.73%** |
 
 KPI logic is fully documented in [`notebooks/04_statistical_analysis.ipynb`](notebooks/04_statistical_analysis.ipynb) and exported via [`notebooks/05_final_load_prep.ipynb`](notebooks/05_final_load_prep.ipynb).
 
@@ -142,19 +142,19 @@ KPI logic is fully documented in [`notebooks/04_statistical_analysis.ipynb`](not
 
 *Written in decision language — what a stakeholder should think or act on:*
 
-1. **The failure rate is 5.07%, but the signal is highly concentrated.** Closed startups are a minority in the data; any predictive model must be evaluated on precision/recall, not accuracy alone.
+1. **The failure rate is 5.41%, but the signal is highly concentrated.** Closed startups are a minority in the data; any predictive model must be evaluated on precision/recall, not accuracy alone.
 
 2. **Startups with only one funding round fail at the highest rate.** Single-round firms are the clearest, most actionable high-risk cohort in the entire dataset.
 
 3. **Underfunding is a stronger predictor of failure than sector or geography.** Closed startups received a median of **$850K** versus **$1.75M** for operating firms — a **$900K gap** that holds across all major sectors.
 
-4. **Series A is the critical survival inflection point.** Startups that cross into Series A territory show measurably lower failure rates (4.71% vs 5.21% pre-Series A), suggesting investor validation compounds survival probability.
+4. **Series A is the critical survival inflection point.** Startups that cross into Series A territory show measurably lower failure rates (5.21% vs 5.45% pre-Series A), suggesting investor validation compounds survival probability.
 
 5. **Sector risk is uneven and statistically significant.** Markets such as `Curated Web` and `Games` sit at the high-risk end of the largest-sector rankings; biotech and enterprise software show relatively lower failure rates.
 
 6. **Founding cohort matters.** The 2005–2009 cohorts show the sharpest failure-rate concentration, suggesting macro conditions (financial crisis) amplify structural funding weaknesses.
 
-7. **Non-US startups fail at slightly higher rates (5.31% vs 4.93%).** The US ecosystem advantage — denser investor networks, more follow-on capital — is measurable in the outcomes data.
+7. **Non-US startups fail at slightly higher rates (5.73% vs 5.18%).** The US ecosystem advantage — denser investor networks, more follow-on capital — is measurable in the outcomes data.
 
 8. **Funding rounds are a stronger protective signal than any single capital amount.** Repeat investor participation (more rounds) consistently aligns with better outcomes, independently of total dollars raised.
 
@@ -202,7 +202,7 @@ Dashboard screenshots are stored in [`tableau/screenshots/`](tableau/screenshots
 
 ---
 
-## 🗂️Repository Structure
+## Repository Structure
 
 ```
 SectionC_G17_WhyStartupsFail/
@@ -213,7 +213,7 @@ SectionC_G17_WhyStartupsFail/
 │   ├── raw/                              ← Original dataset (never edited)
 │   │   └── investments_VC.csv            ← 54,294 rows · Crunchbase via Kaggle
 │   └── processed/                        ← All ETL outputs (auto-generated)
-│       ├── startups_cleaned.csv          ← Primary cleaned dataset (33,613 rows · 47 cols)
+│       ├── startups_cleaned.csv          ← Primary cleaned dataset (49,437 rows · 42 cols)
 │       ├── startups_cleaned.parquet      ← Compressed format for fast reads
 │       ├── tableau_master.csv            ← Tableau-ready flat file
 │       ├── kpi_summary.csv               ← Pre-computed KPI values
@@ -305,90 +305,37 @@ jupyter notebook
 
 ##  Tech Stack
 
-| Tool / Library | Status | Purpose |
-|---|---|---|
-| Python 3.9+ | Mandatory | Core language |
-| Jupyter Notebooks | Mandatory | ETL, analysis, and KPI computation |
-| Google Colab | Supported | Cloud notebook execution |
-| Tableau Public | Mandatory | Dashboard design, publishing, sharing |
-| GitHub | Mandatory | Version control, collaboration, contribution audit |
-| `pandas` | Core | Data manipulation and feature engineering |
-| `numpy` | Core | Numerical operations |
-| `matplotlib` | Visualisation | EDA charts |
-| `seaborn` | Visualisation | Statistical plots |
-| `scipy` | Statistics | Mann-Whitney U, chi-square tests |
-| `statsmodels` | Statistics | Logistic regression, OLS |
+| Tool / Library  | Purpose |
+|---|---|
+| Python 3.9+  | Core language |
+| Jupyter Notebooks | ETL, analysis, and KPI computation |
+| Google Colab | Cloud notebook execution |
+| Tableau Public | Dashboard design, publishing, sharing |
+| GitHub | Version control, collaboration, contribution audit |
+| `pandas` | Data manipulation and feature engineering |
+| `numpy` | Numerical operations |
+| `matplotlib` | EDA charts |
+| `seaborn` | Statistical plots |
+| `scipy` | Mann-Whitney U, chi-square tests |
+| `statsmodels` | Logistic regression, OLS |
 
----
 
-##  Evaluation Rubric
-
-| Area | Marks | What the Evaluator Is Looking For |
-|---|---|---|
-| Problem Framing | 10 | Is the business question clear, scoped, and decision-relevant? |
-| Data Quality & ETL | 15 | Is the Python pipeline thorough, reproducible, and documented? |
-| Analysis Depth | 25 | Are statistical methods applied correctly with actionable insight? |
-| Dashboard & Visualization | 20 | Is the Tableau dashboard interactive and tied to the business problem? |
-| Business Recommendations | 20 | Are recommendations specific, evidence-backed, and impact-linked? |
-| Storytelling & Clarity | 10 | Is the presentation professional, logical, and coherent? |
-| **Total** | **100** | |
-
----
-
-## Submission Checklist
-
-**GitHub Repository**
-- [ ] Public repository with correct naming convention `SectionC_G17_WhyStartupsFail`
-- [ ] All 5 notebooks committed in `.ipynb` format
-- [ ] `data/raw/` contains the original, unedited dataset
-- [ ] `data/processed/` contains all 10 cleaned output files
-- [ ] `tableau/screenshots/` contains all dashboard + EDA chart exports
-- [ ] `tableau/dashboard_links.md` contains the Tableau Public URL
-- [ ] `docs/data_dictionary.md` is complete (47 columns documented)
-- [ ] `README.md` explains project, dataset, team, and insights
-- [ ] All members have visible commits and merged pull requests
-
-**Tableau Dashboard**
-- [ ] Published on Tableau Public with a working public URL
-- [ ] Minimum one interactive filter per view
-- [ ] Dashboard directly addresses the core business question
-
-**Project Report (PDF — 10–15 pages)**
-- [ ] Cover page, executive summary, sector context, problem statement
-- [ ] ETL methodology, data quality audit, KPI framework
-- [ ] EDA visualisations with written insights
-- [ ] Statistical analysis results and interpretation
-- [ ] Dashboard screenshots with narrative explanation
-- [ ] 8–12 key insights written in decision language
-- [ ] 3–5 actionable recommendations with expected impact
-- [ ] Contribution matrix matches GitHub history
-
-**Presentation Deck (10–12 slides, exported to PDF)**
-- [ ] Title → problem → data → methodology → EDA → stats → dashboard → recommendations → limitations → next steps
-
-**Individual Assets**
-- [ ] DVA-oriented resume updated to include this capstone
-- [ ] Portfolio link or project case study published
-
----
-
-## 📊 Contribution Matrix
+##  Contribution Matrix
 
 | Team Member | Dataset & Sourcing | ETL & Cleaning | EDA & Analysis | Statistical Analysis | Tableau Dashboard | Report Writing | PPT & Viva |
 |---|---|---|---|---|---|---|---|
-| Member 1 | **Owner** | Support | Support | Support | Support | Support | Support |
-| Member 2 | Support | **Owner** | Support | Support | Support | Support | Support |
-| Member 3 | Support | Support | **Owner** | Support | Support | Support | Support |
-| Member 4 | Support | Support | Support | **Owner** | Support | Support | Support |
-| Member 5 | Support | Support | Support | Support | **Owner** | Support | Support |
-| Member 6 | Support | Support | Support | Support | Support | **Owner** | Support |
-| Member 7 | Support | Support | Support | Support | Support | Support | **Owner** |
+| Riya Garg | **Owner** | Support | Support | **Owner** | **Owner** | Support | **Owner** |
+| Rashmi Anand | Support | Support | **Owner** | **Owner** | **Owner** | **Owner** | **Owner** |
+| Vachan Gupta | Support | **Owner** | Support | Support | Support | Support | Support |
+| Abhinav Choudhary | Support | Support | Support | Support | **Owner** | **Owner** | **Owner** |
+| Vansh Panwar | Support | Support | Support | Support | Support | Support | **Owner** |
+
 
 *Declaration: We confirm that the above contribution details are accurate and verifiable through GitHub Insights, PR history, and submitted artifacts.*
 
 ---
 
-## 🎓 Academic Integrity
+##  Academic Integrity
 
 All analysis, code, and recommendations in this repository are the original work of **Section C, Group 17**. Free-riding is tracked via GitHub Insights and pull request history. Any mismatch between the contribution matrix and actual commit history may result in individual grade adjustments.
 
