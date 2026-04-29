@@ -22,9 +22,9 @@ This directory showcases the Data Visualization & Analytics (DVA) portfolios of 
 - **Role:** [ETL & Data Cleaning, EDA & Analysis]
 
 
-### 4. [Contributor 4 Name]
-- **Portfolio:** [Link to portfolio/GitHub/LinkedIn/Website]
-- **Role:** [Primary role in the project]
+### 4. Abhinav Choudhary
+- **Portfolio:** https://github.com/itsabhi-21
+- **Role:** Tableau Dashboarding and deployment, Report and Presentation 
 
 
 ### 5. [Riya Garg]
