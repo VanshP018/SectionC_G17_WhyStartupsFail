@@ -180,7 +180,7 @@ KPI logic is fully documented in [`notebooks/04_statistical_analysis.ipynb`](not
 
 | Item | Details |
 |---|---|
-| **Dashboard URL** | *(Pending Tableau Public publication — update in [`tableau/dashboard_links.md`](tableau/dashboard_links.md))* |
+| **Dashboard URL** | *https://public.tableau.com/views/tableau_17774462589810/Dashboard1?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link* |
 | **Executive View** | KPI summary tiles, overall failure rate by status, funding gap summary card |
 | **Operational View** | Sector failure rate bar chart, geographic heatmap, funding scatter plot |
 | **Trend View** | Year-over-year startup volume and failure rate dual-axis chart |
